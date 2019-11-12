@@ -1,0 +1,14 @@
+# VScode
+.vscode 
+
+# Venv 
+env_thor
+
+# Python
+__pycache__
+
+# Exe output folder
+output
+
+# RSA keys folder 
+server/keys
