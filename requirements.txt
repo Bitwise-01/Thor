@@ -1,2 +1,2 @@
 pycryptodome==3.9.1
-PyInstaller==3.5
+PyInstaller==5.13.1
